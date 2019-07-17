@@ -30,7 +30,7 @@
 	var contentDivIdentifier = 'div#content';	//Content Div, which will be hidden, to be replaced by the analytics hub
 	var contentDivClass = "ic-Layout-contentMain";	//Class of the content div, which will also be applied to the analytics hub div
 	
- 	var course_id = getCourseId();	//Get Course ID
+ 	var courseId = getCourseId();	//Get Course ID
 	var openButtonId = 'analytics-hub-open';	//ID for the analytics button
 	var analyticsHubDivId = 'analytics-hub';	//ID for the analytics button
 	var analyticsHubDivIdentifier = 'div#analytics-hub';	//ID for the analytics button
@@ -43,7 +43,7 @@
 		//NOT ROBUST: URL for identifying this button could change
 		//NOT ROBUST: Permissions should not be based on existence of that button
 		//TODO: Use API to work out if user is permitted to perform analytics functions
-		if(homeRightOptionsDiv.length > 0 && $('a[href="/courses/' + course_id + '/analytics"]', homeRightOptionsDiv).length > 0) {
+		if(homeRightOptionsDiv.length > 0 && $('a[href="/courses/' + courseId + '/analytics"]', homeRightOptionsDiv).length > 0) {
 			//Add button
 			var buttonHtml = createButtonHtml(openButtonId);
 			homeRightOptionsDiv.append(buttonHtml);
@@ -78,16 +78,34 @@
 		var analyticsHubDiv = '<div id="' + analyticsHubDivId + '" class="' + contentDivClass + '"></div>';
 		$(contentWrapperDivIdentifier).prepend(analyticsHubDiv);
 		
-		//Add the Header
+		//Add the header
 		var headerId = 'analyitcs-hub-header';
-		var analyticsHubHeader = '<h1 id="' + headerId + '">Analytics Hub</h1>';
+		var analyticsHubHeader = '<h2 id="' + headerId + '">Analytics Hub</h2>';
 		$(analyticsHubDivIdentifier).append(analyticsHubHeader);
 
-		//Add the close button
+		//Add the close button into the header
 		var closeButtonId = 'analyitcs-hub-close';
-		var analyticsHubCloseButton = '<a id="' + closeButtonId + '" style="float: right;cursor: pointer;"><i class="icon-end" role="presentation"></i></a>';
+		var analyticsHubCloseButton = '<a id="' + closeButtonId + '" style="float: right; cursor: pointer;"><i class="icon-end" role="presentation"></i></a>';
 		$('#' + headerId).prepend(analyticsHubCloseButton);
 		$('#' + closeButtonId).bind('click', function() {closeAnalytics();});
+		
+		//Add course analytics header and link
+		//NOT ROBUST: The format of these links might change
+		var courseAnalyticsHeader = '<h3>Course Analytics</h3>';
+		var courseAnalyticsURL = 'https://canvas.ox.ac.uk/courses/' + courseId + '/analytics';
+		var courseAnalyticsLink = '<a href="' + courseAnalyticsURL + '" title="Course Analytics" target="_blank">' + courseAnalyticsURL + '</a>';
+		var courseAnalyticsExplanation = 'Some text explaining what you see in the Course Analytics';
+		var courseAnalyticsHTML = courseAnalyticsHeader + '<p>' + courseAnalyticsLink + '<br />' + courseAnalyticsExplanation + '</p>';
+		$(analyticsHubDivIdentifier).append(courseAnalyticsHTML);
+
+		//Add course analytics header and link
+		//NOT ROBUST: The format of these links might change
+		var courseStatsHeader = '<h3>Course Statistics</h3>';
+		var courseStatsURL = 'https://canvas.ox.ac.uk/courses/' + courseId + '/statistics';
+		var courseStatsLink = '<a href="' + courseStatsURL + '" title="Course Statistics" target="_blank">' + courseStatsURL + '</a>';
+		var courseStatsExplanation = 'Some text explaining what you see in the Course Statistics';
+		var courseStatsHTML = courseStatsHeader + '<p>' + courseStatsLink + '<br />' + courseStatsExplanation + '</p>';
+		$(analyticsHubDivIdentifier).append(courseStatsHTML);
 	};
 	
 	function closeAnalytics() { 
