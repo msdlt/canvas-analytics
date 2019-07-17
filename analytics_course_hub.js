@@ -49,7 +49,8 @@
 			homeRightOptionsDiv.append(buttonHtml);
 			
 			//On click, call openAnalytics
-			$('#' + openButtonId).bind('click', function() {openAnalytics();});
+			addOpenButtonClickHandler(openButtonId);
+			//$('#' + openButtonId).on('click', function() {openAnalytics();});
 		}
 	});
 	
@@ -63,7 +64,7 @@
 		//NOT ROBUST: Canvas button format/style could change
 		var buttonAnchorTagOpen = '<a class="btn button-sidebar-wide" id="' + openButtonId + '">';
 		var buttonIcon = '<i class="icon-analytics" role="presentation"></i> ';
-		var buttonText = 'Advanced Analytics';
+		var buttonText = 'Analytics Hub';
 		var buttonAnchorTagClose = '</a>';
 		
 		var buttonHtml = buttonAnchorTagOpen + buttonIcon + buttonText + buttonAnchorTagClose;
@@ -71,7 +72,21 @@
 		return buttonHtml;
 	}
 	
+	function addOpenButtonClickHandler(buttonId = null) {
+		if(buttonId) {
+			$('#' + buttonId).on('click', function() {openAnalytics();});
+		}
+	}
+	
+	function removeButtonClickHandlers(buttonId = null) {
+		if(buttonId) {
+			$('#' + buttonId).off('click');
+		}
+	}
+	
 	function openAnalytics() { 
+		removeButtonClickHandlers(openButtonId);
+		//$('#' + openButtonId).off('click');	//Remove click handler from button
 		$(contentDivIdentifier).hide();	//Hide the default contentDiv
 		
 		//Display the Analytics Hub within the content wrapper
@@ -87,7 +102,7 @@
 		var closeButtonId = 'analyitcs-hub-close';
 		var analyticsHubCloseButton = '<a id="' + closeButtonId + '" style="float: right; cursor: pointer;"><i class="icon-end" role="presentation"></i></a>';
 		$('#' + headerId).prepend(analyticsHubCloseButton);
-		$('#' + closeButtonId).bind('click', function() {closeAnalytics();});
+		$('#' + closeButtonId).on('click', function() {closeAnalytics();});
 		
 		//Add course analytics header and link
 		//NOT ROBUST: The format of these links might change
@@ -111,6 +126,7 @@
 	function closeAnalytics() { 
 		$(analyticsHubDivIdentifier).hide();
 		$(contentDivIdentifier).show();
+		addOpenButtonClickHandler(openButtonId);
 	};
 	
 	function getCourseId() {
