@@ -23,9 +23,17 @@
 	//This div contains buttons like "Student view" and "Choose home page", and will be where the analytics hub button is added
 	//NOT ROBUST: Identifier could change
 	var courseOptionsDivIdentifier = 'div#course_show_secondary div.course-options';
+
+	//IDs and Classes for Canvas content elements
+	//NOT ROBUST: These could all change
+	var contentWrapperDivIdentifier = 'div#content-wrapper';	//Content wrapper, where analytics hub will be added
+	var contentDivIdentifier = 'div#content';	//Content Div, which will be hidden, to be replaced by the analytics hub
+	var contentDivClass = "ic-Layout-contentMain";	//Class of the content div, which will also be applied to the analytics hub div
 	
  	var course_id = getCourseId();	//Get Course ID
-	var buttonId = 'analytics_button';	//ID for the analytics button
+	var openButtonId = 'analytics-hub-open';	//ID for the analytics button
+	var analyticsHubDivId = 'analytics-hub';	//ID for the analytics button
+	var analyticsHubDivIdentifier = 'div#analytics-hub';	//ID for the analytics button
 	
 	$(document).ready(function() {
 		//Get home page right hand side course options div
@@ -37,23 +45,23 @@
 		//TODO: Use API to work out if user is permitted to perform analytics functions
 		if(homeRightOptionsDiv.length > 0 && $('a[href="/courses/' + course_id + '/analytics"]', homeRightOptionsDiv).length > 0) {
 			//Add button
-			var buttonHtml = createButtonHtml(buttonId);
+			var buttonHtml = createButtonHtml(openButtonId);
 			homeRightOptionsDiv.append(buttonHtml);
 			
 			//On click, call openAnalytics
-			$('#' + buttonId).bind('click', function() {openAnalytics();});
+			$('#' + openButtonId).bind('click', function() {openAnalytics();});
 		}
 	});
 	
-	function createButtonHtml(buttonId = null) {
+	function createButtonHtml(openButtonId = null) {
 		//Must have a button ID, otherwise create nothing
-		if(!buttonId) {
+		if(!openButtonId) {
 			return "";
 		}
 		
 		//HTML snippets for creating the button
 		//NOT ROBUST: Canvas button format/style could change
-		var buttonAnchorTagOpen = '<a class="btn button-sidebar-wide" id="' + buttonId + '">';
+		var buttonAnchorTagOpen = '<a class="btn button-sidebar-wide" id="' + openButtonId + '">';
 		var buttonIcon = '<i class="icon-analytics" role="presentation"></i> ';
 		var buttonText = 'Advanced Analytics';
 		var buttonAnchorTagClose = '</a>';
@@ -64,7 +72,27 @@
 	}
 	
 	function openAnalytics() { 
-		alert("analytics opened");
+		$(contentDivIdentifier).hide();	//Hide the default contentDiv
+		
+		//Display the Analytics Hub within the content wrapper
+		var analyticsHubDiv = '<div id="' + analyticsHubDivId + '" class="' + contentDivClass + '"></div>';
+		$(contentWrapperDivIdentifier).prepend(analyticsHubDiv);
+		
+		//Add the Header
+		var headerId = 'analyitcs-hub-header';
+		var analyticsHubHeader = '<h1 id="' + headerId + '">Analytics Hub</h1>';
+		$(analyticsHubDivIdentifier).append(analyticsHubHeader);
+
+		//Add the close button
+		var closeButtonId = 'analyitcs-hub-close';
+		var analyticsHubCloseButton = '<a id="' + closeButtonId + '" style="float: right;cursor: pointer;"><i class="icon-end" role="presentation"></i></a>';
+		$('#' + headerId).prepend(analyticsHubCloseButton);
+		$('#' + closeButtonId).bind('click', function() {closeAnalytics();});
+	};
+	
+	function closeAnalytics() { 
+		$(analyticsHubDivIdentifier).hide();
+		$(contentDivIdentifier).show();
 	};
 	
 	function getCourseId() {
