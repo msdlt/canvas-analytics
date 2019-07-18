@@ -133,6 +133,15 @@
 		var exampleStudentAnalyticsLink = '<a href="' + exampleStudentAnalyticsReportURL + '" title="Example Student Analytics" target="_blank">' + exampleStudentAnalyticsReportURL + '</a>';
 		var exampleStudentAnalyticsHTML = '<p>Example Student Analytics: ' + exampleAccessReportLink + '</p>';
 		$(analyticsHubDivIdentifier).append(studentReportsHeader + studentReportsExplanation + exampleAccessReportHTML + exampleStudentAnalyticsHTML);
+
+		//Add Quiz-Specific Statistics Header and Links
+		//NOT ROBUST: The format of these links might change
+		var quizStatsHeader = '<h3>Quiz Statistics</h3>';
+		var quizStatsExplanation = '<p>This is just an example, but it would be possible to fetch the list of quizzes in the course, and generate the following link for each quiz. The link below will only work for the "End of Module Review: Intro to GHS" quiz (5924) in the "GHSE 01: Introduction to Global Health Science" (4018) course.</p>';
+		var exampleQuizStatsURL = '/courses/' + courseId + '/quizzes/5924/statistics';
+		var exampleQuizStatsLink = '<a href="' + exampleQuizStatsURL + '" title="Example Quiz Statistics" target="_blank">' + exampleQuizStatsURL + '</a>';
+		var exampleQuizStatsHTML = '<p>Example Quiz Statistics: ' + exampleQuizStatsLink + '</p>';
+		$(analyticsHubDivIdentifier).append(quizStatsHeader + quizStatsExplanation + exampleQuizStatsHTML);
 	};
 	
 	function closeAnalytics() { 
