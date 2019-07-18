@@ -14,19 +14,15 @@
     'use strict';
     // Set up columns that will be written to csv file.
     // Two additional columns will be added to the date-time columns, one for the date alone and one for the time alone, for convenience in analysis)
-    var csv_columns = [ 
-						//{'column_name': 'DisplayName',    'canvas_name': 'name'              },
-                        //{'column_name': 'UserID',         'canvas_name': 'user_id'           },
-                        {'column_name': 'Code',         'canvas_name': 'asset_code'           },
-                        {'column_name': 'Title',          'canvas_name': 'readable_name'     },
+    var csv_columns = [ {'column_name': 'DisplayName',    'canvas_name': 'name'              },
+                        {'column_name': 'UserID',         'canvas_name': 'user_id'           },
                         {'column_name': 'Category',       'canvas_name': 'asset_category'    },
                         {'column_name': 'Class',          'canvas_name': 'asset_class_name'  },
-                        {'column_name': 'Unique Viewers',          'canvas_name': 'view_unique'        },
-                        {'column_name': 'Total Views',          'canvas_name': 'view_score'        },
-                        {'column_name': 'Unique Participators', 'canvas_name': 'participate_unique' },
-                        {'column_name': 'Total Participations', 'canvas_name': 'participate_score' },
-                        //{'column_name': 'LastAccess',     'canvas_name': 'last_access',      },
-                        //{'column_name': 'FirstAccess',    'canvas_name': 'created_at',       },
+                        {'column_name': 'Title',          'canvas_name': 'readable_name'     },
+                        {'column_name': 'Views',          'canvas_name': 'view_score'        },
+                        {'column_name': 'Participations', 'canvas_name': 'participate_score' },
+                        {'column_name': 'LastAccess',     'canvas_name': 'last_access',      },
+                        {'column_name': 'FirstAccess',    'canvas_name': 'created_at',       },
                         {'column_name': 'Action',         'canvas_name': 'action_level'      }
                      ];
     // Create the header row for the csv file
