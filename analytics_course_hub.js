@@ -107,7 +107,7 @@
 		//Add course analytics header and link
 		//NOT ROBUST: The format of these links might change
 		var courseAnalyticsHeader = '<h3>Course Analytics</h3>';
-		var courseAnalyticsURL = 'https://canvas.ox.ac.uk/courses/' + courseId + '/analytics';
+		var courseAnalyticsURL = '/courses/' + courseId + '/analytics';
 		var courseAnalyticsLink = '<a href="' + courseAnalyticsURL + '" title="Course Analytics" target="_blank">' + courseAnalyticsURL + '</a>';
 		var courseAnalyticsExplanation = 'Some text explaining what you see in the Course Analytics';
 		var courseAnalyticsHTML = courseAnalyticsHeader + '<p>' + courseAnalyticsLink + '<br />' + courseAnalyticsExplanation + '</p>';
@@ -116,11 +116,23 @@
 		//Add course analytics header and link
 		//NOT ROBUST: The format of these links might change
 		var courseStatsHeader = '<h3>Course Statistics</h3>';
-		var courseStatsURL = 'https://canvas.ox.ac.uk/courses/' + courseId + '/statistics';
+		var courseStatsURL = '/courses/' + courseId + '/statistics';
 		var courseStatsLink = '<a href="' + courseStatsURL + '" title="Course Statistics" target="_blank">' + courseStatsURL + '</a>';
 		var courseStatsExplanation = 'Some text explaining what you see in the Course Statistics';
 		var courseStatsHTML = courseStatsHeader + '<p>' + courseStatsLink + '<br />' + courseStatsExplanation + '</p>';
 		$(analyticsHubDivIdentifier).append(courseStatsHTML);
+		
+		//Add Student-Specific Reports Header and Links
+		//NOT ROBUST: The format of these links might change
+		var studentReportsHeader = '<h3>Student-Specific Reports</h3>';
+		var studentReportsExplanation = '<p>This is just an example, but it would be possible to fetch the list of students in the course, and generate the following links for each student. The links below will only work in Courses where pubh0196+mscstudent@canvas-alias.it.ox.ac.uk (156389) is a student.</p>';
+		var exampleAccessReportURL = '/courses/' + courseId + '/users/156389/usage';
+		var exampleAccessReportLink = '<a href="' + exampleAccessReportURL + '" title="Example Access Report" target="_blank">' + exampleAccessReportURL + '</a>';
+		var exampleAccessReportHTML = '<p>Example Access Report: ' + exampleAccessReportLink + '</p>';
+		var exampleStudentAnalyticsReportURL = '/courses/' + courseId + '/analytics/users/156389';
+		var exampleStudentAnalyticsLink = '<a href="' + exampleStudentAnalyticsReportURL + '" title="Example Student Analytics" target="_blank">' + exampleStudentAnalyticsReportURL + '</a>';
+		var exampleStudentAnalyticsHTML = '<p>Example Student Analytics: ' + exampleAccessReportLink + '</p>';
+		$(analyticsHubDivIdentifier).append(studentReportsHeader + studentReportsExplanation + exampleAccessReportHTML + exampleStudentAnalyticsHTML);
 	};
 	
 	function closeAnalytics() { 
