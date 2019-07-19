@@ -161,6 +161,13 @@
 		var exampleQuizStatsLink = '<a href="' + exampleQuizStatsURL + '" title="Example Quiz Statistics" target="_blank">' + exampleQuizStatsURL + '</a>';
 		var exampleQuizStatsHTML = '<p>Example Quiz Statistics: ' + exampleQuizStatsLink + '</p>';
 		$(analyticsHubDivIdentifier).append(quizStatsHeader + quizStatsExplanation + exampleQuizStatsHTML);
+		
+		//Add Other Possibilities Paragraph
+		var possibilitiesHeader = '<h3>Other Possibilities</h3>';
+		var studentInterationURL = '/users/7/teacher_activity/course/3838';
+		var pageViewsURL = '/api/v1/users/7/page_views?per_page=100';
+		var possibilitiesText = '<ul><li>Student interaction reports, e.g. <a href="' + studentInterationURL + '" target="_blank">' + studentInterationURL + '</a></li><li>Mobile Usage: Could churn through the API version of the page views, e.g. <a href="' + pageViewsURL + '" target="_blank">' + pageViewsURL + '</a> (See “Canvas for Android” as the app_name for some of the records) in a similar way to the script for the usage reports does.</li></ul>';
+		$(analyticsHubDivIdentifier).append(possibilitiesHeader + possibilitiesText);
 	};
 	
 	function closeAnalytics() { 
