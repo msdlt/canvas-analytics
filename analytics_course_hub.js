@@ -115,7 +115,7 @@
 		var courseAnalyticsHeader = '<h3>Course Analytics</h3>';
 		var courseAnalyticsURL = '/courses/' + courseId + '/analytics';
 		var courseAnalyticsLink = '<a href="' + courseAnalyticsURL + '" title="Course Analytics" target="_blank">' + courseAnalyticsURL + '</a>';
-		var courseAnalyticsExplanation = 'Some text explaining what you see in the Course Analytics';
+		var courseAnalyticsExplanation = 'The "View Course Analytics" button on the right hand side of the home page also takes you to this page.';
 		var courseAnalyticsHTML = courseAnalyticsHeader + '<p>' + courseAnalyticsLink + '<br />' + courseAnalyticsExplanation + '</p>';
 		$(analyticsHubDivIdentifier).append(courseAnalyticsHTML);
 
@@ -124,19 +124,19 @@
 		var courseStatsHeader = '<h3>Course Statistics</h3>';
 		var courseStatsURL = '/courses/' + courseId + '/statistics';
 		var courseStatsLink = '<a href="' + courseStatsURL + '" title="Course Statistics" target="_blank">' + courseStatsURL + '</a>';
-		var courseStatsExplanation = 'Some text explaining what you see in the Course Statistics';
+		var courseStatsExplanation = 'Settings > Course Statistics also takes you to this page.';
 		var courseStatsHTML = courseStatsHeader + '<p>' + courseStatsLink + '<br />' + courseStatsExplanation + '</p>';
 		$(analyticsHubDivIdentifier).append(courseStatsHTML);
 
 		//Add Resource & Student Usage Report links
 		var resourceUsagesHeader = '<h3>Resource & Student Usage Reports</h3>';
 		var resourceUsageReportLink = '<a id="' + resourceUsageLinkId + '" href="javascript:void(0)">Generate Resource Usage Report</a>';
-		var resourceUsageExplanation = 'Some text explaining what you see in the Resource Usage Report';
+		var resourceUsageExplanation = 'Shows views and participations for each resource/activity. ';
 		var resourceUsageHTML = resourceUsagesHeader + '<p>' + resourceUsageReportLink + '<br />' + resourceUsageExplanation + '<br /><span id="' + resourceUsageProgressId + '"></span></p>';
 		$(analyticsHubDivIdentifier).append(resourceUsageHTML);
 		resourceUsageClickOn();
 		var studentUsageReportLink = '<a id="' + studentUsageLinkId + '" href="javascript:void(0)">Generate Student Usage Report</a>';
-		var studentUsageExplanation = 'Some text explaining what you see in the Student Usage Report';
+		var studentUsageExplanation = 'Shows views and participations per student for each resource/activity.';
 		var studentUsageHTML = '<p>' + studentUsageReportLink + '<br />' + studentUsageExplanation + '<br /><span id="' + studentUsageProgressId + '"></span></p>';
 		$(analyticsHubDivIdentifier).append(studentUsageHTML);
 		studentUsageClickOn();
@@ -144,19 +144,19 @@
 		//Add Student-Specific Reports Links
 		//NOT ROBUST: The format of these links might change
 		var studentReportsHeader = '<h3>Student-Specific Reports</h3>';
-		var studentReportsExplanation = '<p>This is just an example, but it would be possible to fetch the list of students in the course, and generate the following links for each student. The links below will only work in Courses where pubh0196+mscstudent@canvas-alias.it.ox.ac.uk (156389) is a student.</p>';
+		var studentReportsExplanation = '<p>These are just example links, but it would be possible to fetch the list of students in the course, and generate the following links for each student. The links below will only work in Courses where pubh0196+mscstudent@canvas-alias.it.ox.ac.uk (156389) is a student.</p>';
 		var exampleAccessReportURL = '/courses/' + courseId + '/users/156389/usage';
 		var exampleAccessReportLink = '<a href="' + exampleAccessReportURL + '" title="Example Access Report" target="_blank">' + exampleAccessReportURL + '</a>';
 		var exampleAccessReportHTML = '<p>Example Access Report: ' + exampleAccessReportLink + '</p>';
 		var exampleStudentAnalyticsReportURL = '/courses/' + courseId + '/analytics/users/156389';
 		var exampleStudentAnalyticsLink = '<a href="' + exampleStudentAnalyticsReportURL + '" title="Example Student Analytics" target="_blank">' + exampleStudentAnalyticsReportURL + '</a>';
-		var exampleStudentAnalyticsHTML = '<p>Example Student Analytics: ' + exampleAccessReportLink + '</p>';
+		var exampleStudentAnalyticsHTML = '<p>Example Student Analytics: ' + exampleStudentAnalyticsLink + '</p>';
 		$(analyticsHubDivIdentifier).append(studentReportsHeader + studentReportsExplanation + exampleAccessReportHTML + exampleStudentAnalyticsHTML);
 
 		//Add Quiz-Specific Statistics Links
 		//NOT ROBUST: The format of these links might change
 		var quizStatsHeader = '<h3>Quiz Statistics</h3>';
-		var quizStatsExplanation = '<p>This is just an example, but it would be possible to fetch the list of quizzes in the course, and generate the following link for each quiz. The link below will only work for the "End of Module Review: Intro to GHS" quiz (5924) in the "GHSE 01: Introduction to Global Health Science" (4018) course.</p>';
+		var quizStatsExplanation = '<p>This is just an example link, but it would be possible to fetch the list of quizzes in the course, and generate the following link for each quiz. The link below will only work for the "End of Module Review: Intro to GHS" quiz (5924) in the "GHSE 01: Introduction to Global Health Science" (4018) course.</p>';
 		var exampleQuizStatsURL = '/courses/' + courseId + '/quizzes/5924/statistics';
 		var exampleQuizStatsLink = '<a href="' + exampleQuizStatsURL + '" title="Example Quiz Statistics" target="_blank">' + exampleQuizStatsURL + '</a>';
 		var exampleQuizStatsHTML = '<p>Example Quiz Statistics: ' + exampleQuizStatsLink + '</p>';
@@ -166,7 +166,7 @@
 		var possibilitiesHeader = '<h3>Other Possibilities</h3>';
 		var studentInterationURL = '/users/7/teacher_activity/course/3838';
 		var pageViewsURL = '/api/v1/users/7/page_views?per_page=100';
-		var possibilitiesText = '<ul><li>Student interaction reports, e.g. <a href="' + studentInterationURL + '" target="_blank">' + studentInterationURL + '</a></li><li>Mobile Usage: Could churn through the API version of the page views, e.g. <a href="' + pageViewsURL + '" target="_blank">' + pageViewsURL + '</a> (See “Canvas for Android” as the app_name for some of the records) in a similar way to the script for the usage reports does.</li></ul>';
+		var possibilitiesText = '<ul><li>Links to student interaction reports for each teacher in the course, e.g. <a href="' + studentInterationURL + '" target="_blank">' + studentInterationURL + '</a></li><li>Mobile Usage: Could churn through the API version of the page views for each student, e.g. <a href="' + pageViewsURL + '" target="_blank">' + pageViewsURL + '</a> (See “Canvas for Android” as the app_name for some of the records, if Jon\'s been on the app recently)</li></ul>';
 		$(analyticsHubDivIdentifier).append(possibilitiesHeader + possibilitiesText);
 	};
 	
