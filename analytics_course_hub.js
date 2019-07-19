@@ -35,6 +35,10 @@
 	var analyticsHubDivId = 'analytics-hub';	//ID for the analytics button
 	var analyticsHubDivIdentifier = 'div#analytics-hub';	//ID for the analytics button
 	
+	//Usage Progress IDs need to be in global scope
+	var resourceUsageProgressId = 'resource-usage-progress';
+	var studentUsageProgressId = 'student-usage-progress';
+
 	$(document).ready(function() {
 		//Get home page right hand side course options div
 		var homeRightOptionsDiv = $(courseOptionsDivIdentifier);
@@ -104,7 +108,7 @@
 		$('#' + headerId).prepend(analyticsHubCloseButton);
 		$('#' + closeButtonId).on('click', function() {closeAnalytics();});
 		
-		//Add course analytics header and link
+		//Add Course Analytics link
 		//NOT ROBUST: The format of these links might change
 		var courseAnalyticsHeader = '<h3>Course Analytics</h3>';
 		var courseAnalyticsURL = '/courses/' + courseId + '/analytics';
@@ -113,7 +117,7 @@
 		var courseAnalyticsHTML = courseAnalyticsHeader + '<p>' + courseAnalyticsLink + '<br />' + courseAnalyticsExplanation + '</p>';
 		$(analyticsHubDivIdentifier).append(courseAnalyticsHTML);
 
-		//Add course analytics header and link
+		//Add Course Analytics link
 		//NOT ROBUST: The format of these links might change
 		var courseStatsHeader = '<h3>Course Statistics</h3>';
 		var courseStatsURL = '/courses/' + courseId + '/statistics';
@@ -122,16 +126,22 @@
 		var courseStatsHTML = courseStatsHeader + '<p>' + courseStatsLink + '<br />' + courseStatsExplanation + '</p>';
 		$(analyticsHubDivIdentifier).append(courseStatsHTML);
 
-		//Add Resource Usage Report links
-		var resourceUsagesHeader = '<h3>Resource Usage Reports</h3>';
+		//Add Resource & Student Usage Report links
+		var resourceUsagesHeader = '<h3>Resource & Student Usage Reports</h3>';
 		var resourceUsageLinkId = 'generate-resource-usage';
 		var resourceUsageReportLink = '<a id="' + resourceUsageLinkId + '" href="javascript:void(0)">Generate Resource Usage Report</a>';
-		var resourceUsageExplanation = 'Some text explaining what you see in the Resource Usage Reports';
-		var resourceUsageHTML = resourceUsagesHeader + '<p>' + resourceUsageReportLink + '<br />' + resourceUsageExplanation + '<br /><span id="resource-usage-progress"></span></p>';
+		var resourceUsageExplanation = 'Some text explaining what you see in the Resource Usage Report';
+		var resourceUsageHTML = resourceUsagesHeader + '<p>' + resourceUsageReportLink + '<br />' + resourceUsageExplanation + '<br /><span id="' + resourceUsageProgressId + '"></span></p>';
 		$(analyticsHubDivIdentifier).append(resourceUsageHTML);
-		$('#' + resourceUsageLinkId).on('click', function() {generateResourceUsageDownload();});
+		$('#' + resourceUsageLinkId).on('click', function() {generateResourceUsageDownload(resourceUsageProgressId);});
+		var studentUsageLinkId = 'generate-student-usage';
+		var studentUsageReportLink = '<a id="' + studentUsageLinkId + '" href="javascript:void(0)">Generate Student Usage Report</a>';
+		var studentUsageExplanation = 'Some text explaining what you see in the Student Usage Report';
+		var studentUsageHTML = '<p>' + studentUsageReportLink + '<br />' + studentUsageExplanation + '<br /><span id="' + studentUsageProgressId + '"></span></p>';
+		$(analyticsHubDivIdentifier).append(studentUsageHTML);
+		$('#' + studentUsageLinkId).on('click', function() {generateStudentUsageDownload(studentUsageProgressId);});
 		
-		//Add Student-Specific Reports Header and Links
+		//Add Student-Specific Reports Links
 		//NOT ROBUST: The format of these links might change
 		var studentReportsHeader = '<h3>Student-Specific Reports</h3>';
 		var studentReportsExplanation = '<p>This is just an example, but it would be possible to fetch the list of students in the course, and generate the following links for each student. The links below will only work in Courses where pubh0196+mscstudent@canvas-alias.it.ox.ac.uk (156389) is a student.</p>';
@@ -143,7 +153,7 @@
 		var exampleStudentAnalyticsHTML = '<p>Example Student Analytics: ' + exampleAccessReportLink + '</p>';
 		$(analyticsHubDivIdentifier).append(studentReportsHeader + studentReportsExplanation + exampleAccessReportHTML + exampleStudentAnalyticsHTML);
 
-		//Add Quiz-Specific Statistics Header and Links
+		//Add Quiz-Specific Statistics Links
 		//NOT ROBUST: The format of these links might change
 		var quizStatsHeader = '<h3>Quiz Statistics</h3>';
 		var quizStatsExplanation = '<p>This is just an example, but it would be possible to fetch the list of quizzes in the course, and generate the following link for each quiz. The link below will only work for the "End of Module Review: Intro to GHS" quiz (5924) in the "GHSE 01: Introduction to Global Health Science" (4018) course.</p>';
@@ -159,9 +169,11 @@
 		addOpenButtonClickHandler(openButtonId);
 	};
 	
-	// --- Resource Usage Report Variables and Functions
+	// --- Resource & Student Usage Report Variables and Functions
 
-	var csv_text, students_results, student_vector, usage_results, resource_results, student_counter, pending, canvas_user_id;
+	//Usage Variables
+	var csv_text, students_results, student_vector, usage_results, resource_results, student_counter, pending, canvas_user_id, reportType;
+	
 	var resourceCsvColumns = [ 
 		{'column_name': 'Code',         'canvas_name': 'asset_code'           },
 		{'column_name': 'Title',          'canvas_name': 'title'     },
@@ -190,16 +202,33 @@
         //   Starts data collection by getting the students in the course.
         //   saveStudents() will be called for every page of students found.
         //   studentsRetrieved() will be called after all students have been retrieved.
-		$("#resource-usage-progress").text("Getting students... ");
+		$('#' + resourceUsageProgressId).text("Getting students... ");
 
-		resetVariables();
+		resetUsageVariables();
 		csv_text = generateCSVHeaders(resourceCsvColumns);
         
+		reportType = 'resource';
+		
 		var api_url = "/api/v1/courses/"+courseId+"/users?enrollment_type[]=student&per_page=50";  // the API "endpoint"
         getApiData(api_url, 0, saveStudents, studentsRetrieved);
 	}
 	
-    function resetVariables() {
+	function generateStudentUsageDownload() {
+        //   Starts data collection by getting the students in the course.
+        //   saveStudents() will be called for every page of students found.
+        //   studentsRetrieved() will be called after all students have been retrieved.
+		$('#' + studentUsageProgressId).text("Getting students... ");
+
+		resetUsageVariables();
+		csv_text = generateCSVHeaders(studentCsvColumns);
+        
+		reportType = 'student';
+		
+		var api_url = "/api/v1/courses/"+courseId+"/users?enrollment_type[]=student&per_page=50";  // the API "endpoint"
+        getApiData(api_url, 0, saveStudents, studentsRetrieved);
+	}
+	
+    function resetUsageVariables() {
 		csv_text         = "";
 		students_results = [];  // Storage for students
 		student_vector   = {};  // List of students indexed by canvas_user_id
@@ -229,13 +258,26 @@
         usage_results[canvas_user_id] = [];
         var api_url = "/courses/"+courseId+"/users/"+canvas_user_id+"/usage.json?per_page=50";  // the API "endpoint"
 
-		$("#resource-usage-progress").text("Getting page views: "+student_counter+" / "+students_results.length);
-        getApiData(api_url, canvas_user_id, writeUsageReports, usageReportsRetrieved);
+		var progressSpanId, writeUsageReportsFunction, usageReportsRetrievedFunction;
+		
+		if(reportType === 'student') {
+			progressSpanId = studentUsageProgressId;
+			writeUsageReportsFunction = writeStudentUsageReports;
+			usageReportsRetrievedFunction = studentUsageReportsRetrieved;
+		}
+		else {	//Default to doing resource report
+			progressSpanId = resourceUsageProgressId;
+			writeUsageReportsFunction = writeResourceUsageReports;
+			usageReportsRetrievedFunction = resourceUsageReportsRetrieved;
+		}
+
+		$('#' + progressSpanId).text("Getting page views: "+student_counter+" / "+students_results.length);
+        getApiData(api_url, canvas_user_id, writeUsageReportsFunction, usageReportsRetrievedFunction);
     }
 
-    function writeUsageReports(dummy_id,usage_data){
+    function writeResourceUsageReports(dummy_id,usage_data){
         //   Put usage data in usage_results array.
-		$("#resource-usage-progress").text("Collating results");
+		$('#' + resourceUsageProgressId).text("Collating results");
         Array.prototype.push.apply(usage_results[canvas_user_id],usage_data);
 
         $.each(usage_data, function(index, data){
@@ -268,7 +310,7 @@
         });
     }
 
-	function usageReportsRetrieved(){
+	function resourceUsageReportsRetrieved(){
         //  Called after the usage for a student has been found.
         //  Keeps calling getUsageReports until reports for all students have been retreived.
         //  Then write results to output file.
@@ -299,14 +341,58 @@
             download_link.setAttribute('href', csvData);
             download_link.click();
             document.body.removeChild(download_link);
-            $("#resource-usage-progress").html("Done. ");
+            $('#' + resourceUsageProgressId).html("Done. ");
         }
     }
 	
-	function generateStudentUsageDownload() {
-		 
-		 
-	}
+    function writeStudentUsageReports(dummy_id,usage_data){
+        //   Put usage data in usage_results array.
+		$('#' + studentUsageProgressId).text("Collating results");
+        Array.prototype.push.apply(usage_results[canvas_user_id],usage_data);
+        $.each(usage_data, function(index, data){
+ //           var asset_user_access = data.asset_user_access;
+            var action_string = "";
+            action_string += "\""+student_vector[data.asset_user_access.user_id]+"\"";
+            for (var c = 1; c<studentCsvColumns.length; c++){
+                var column_value = data.asset_user_access[studentCsvColumns[c]["canvas_name"]];
+                if (typeof column_value === 'string') {
+                    if (column_value.indexOf(",") >= 0) column_value = "\""+column_value+"\"";
+                }
+//                console.log(c+" "+column_value);
+                action_string += ","+column_value;
+                if (studentCsvColumns[c]['column_name'].indexOf("Access") > 0){
+                    var this_date =  new Date(column_value);
+                    action_string += ","+dateFormat(this_date, "m/d/yyyy");
+                    action_string += ","+dateFormat(this_date, "HH:MM:ss");
+                }
+            }
+            action_string += "\n";
+            //$("#us_report_area").append(action_string);
+            csv_text += action_string;
+        });
+    }
+
+	function studentUsageReportsRetrieved(){
+        //  Called after the usage for a student has been found.
+        //  Keeps calling getUsageReports until reports for all students have been retreived.
+        //  Then write results to output file.
+        student_counter++;
+        if (student_counter < students_results.length) getUsageReports();
+        else {  // We have reports for all students, so we can write the csv file
+            var csvData = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(csv_text);
+            var download_link = document.createElement('a');
+            download_link.style.display = 'none';
+            document.body.appendChild(download_link);
+            download_link.setAttribute('download', 'student_usage_report-'+courseId+'.csv');
+            download_link.setAttribute('href', csvData);
+            download_link.click();
+            document.body.removeChild(download_link);
+            //$("#us_console").html("Done. ");
+            $('#' + studentUsageProgressId).html("Done. ");
+        }
+    }
+	
+	
     // ---- Utility Routines -----
 
     function generateCSVHeaders(csv_columns) {
