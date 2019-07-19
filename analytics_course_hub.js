@@ -35,8 +35,10 @@
 	var analyticsHubDivId = 'analytics-hub';	//ID for the analytics button
 	var analyticsHubDivIdentifier = 'div#analytics-hub';	//ID for the analytics button
 	
-	//Usage Progress IDs need to be in global scope
+	//Usage Progress IDs need to be in global function scope
+	var resourceUsageLinkId = 'generate-resource-usage';
 	var resourceUsageProgressId = 'resource-usage-progress';
+	var studentUsageLinkId = 'generate-student-usage';
 	var studentUsageProgressId = 'student-usage-progress';
 
 	$(document).ready(function() {
@@ -128,18 +130,16 @@
 
 		//Add Resource & Student Usage Report links
 		var resourceUsagesHeader = '<h3>Resource & Student Usage Reports</h3>';
-		var resourceUsageLinkId = 'generate-resource-usage';
 		var resourceUsageReportLink = '<a id="' + resourceUsageLinkId + '" href="javascript:void(0)">Generate Resource Usage Report</a>';
 		var resourceUsageExplanation = 'Some text explaining what you see in the Resource Usage Report';
 		var resourceUsageHTML = resourceUsagesHeader + '<p>' + resourceUsageReportLink + '<br />' + resourceUsageExplanation + '<br /><span id="' + resourceUsageProgressId + '"></span></p>';
 		$(analyticsHubDivIdentifier).append(resourceUsageHTML);
-		$('#' + resourceUsageLinkId).on('click', function() {generateResourceUsageDownload(resourceUsageProgressId);});
-		var studentUsageLinkId = 'generate-student-usage';
+		resourceUsageClickOn();
 		var studentUsageReportLink = '<a id="' + studentUsageLinkId + '" href="javascript:void(0)">Generate Student Usage Report</a>';
 		var studentUsageExplanation = 'Some text explaining what you see in the Student Usage Report';
 		var studentUsageHTML = '<p>' + studentUsageReportLink + '<br />' + studentUsageExplanation + '<br /><span id="' + studentUsageProgressId + '"></span></p>';
 		$(analyticsHubDivIdentifier).append(studentUsageHTML);
-		$('#' + studentUsageLinkId).on('click', function() {generateStudentUsageDownload(studentUsageProgressId);});
+		studentUsageClickOn();
 		
 		//Add Student-Specific Reports Links
 		//NOT ROBUST: The format of these links might change
@@ -196,13 +196,48 @@
 		{'column_name': 'LastAccess',     'canvas_name': 'last_access',      },
 		{'column_name': 'FirstAccess',    'canvas_name': 'created_at',       },
 		{'column_name': 'Action',         'canvas_name': 'action_level'      }
-	 ];
+	];
+	 
+	function resourceUsageClickOn() {
+		$('#' + resourceUsageLinkId).on('click', function() {generateResourceUsageDownload(resourceUsageProgressId);});
+		removeDisabledCSS(resourceUsageLinkId)
+	}
+	 
+	function resourceUsageClickOff() {
+		$('#' + resourceUsageLinkId).off('click');
+		applyDisabledCSS(resourceUsageLinkId)
+	}
+	 
+	function studentUsageClickOn() {
+		$('#' + studentUsageLinkId).on('click', function() {generateStudentUsageDownload(studentUsageProgressId);});
+		removeDisabledCSS(studentUsageLinkId)
+	}
+	 
+	function studentUsageClickOff() {
+		$('#' + studentUsageLinkId).off('click');
+		applyDisabledCSS(studentUsageLinkId)
+	}
+	
+	function applyDisabledCSS(linkId) {
+		$('#' + linkId).css('cursor', 'not-allowed');
+		$('#' + linkId).css('color', 'grey');
+	}
+	
+	function removeDisabledCSS(linkId) {
+		$('#' + linkId).css('cursor', '');
+		$('#' + linkId).css('color', '');
+	}
 	 
 	function generateResourceUsageDownload() {
+		//Prevent further clicks on usage links
+		resourceUsageClickOff();
+		studentUsageClickOff();
+		
         //   Starts data collection by getting the students in the course.
         //   saveStudents() will be called for every page of students found.
         //   studentsRetrieved() will be called after all students have been retrieved.
 		$('#' + resourceUsageProgressId).text("Getting students... ");
+		$('#' + studentUsageProgressId).text("");
 
 		resetUsageVariables();
 		csv_text = generateCSVHeaders(resourceCsvColumns);
@@ -214,10 +249,15 @@
 	}
 	
 	function generateStudentUsageDownload() {
+		//Prevent further clicks on usage links
+		resourceUsageClickOff();
+		studentUsageClickOff();
+
         //   Starts data collection by getting the students in the course.
         //   saveStudents() will be called for every page of students found.
         //   studentsRetrieved() will be called after all students have been retrieved.
 		$('#' + studentUsageProgressId).text("Getting students... ");
+		$('#' + resourceUsageProgressId).text("");
 
 		resetUsageVariables();
 		csv_text = generateCSVHeaders(studentCsvColumns);
@@ -341,7 +381,11 @@
             download_link.setAttribute('href', csvData);
             download_link.click();
             document.body.removeChild(download_link);
-            $('#' + resourceUsageProgressId).html("Done. ");
+            $('#' + resourceUsageProgressId).text("Done. ");
+			
+			//Allow clicks on usage links again
+			resourceUsageClickOn();
+			studentUsageClickOn();
         }
     }
 	
@@ -388,7 +432,11 @@
             download_link.click();
             document.body.removeChild(download_link);
             //$("#us_console").html("Done. ");
-            $('#' + studentUsageProgressId).html("Done. ");
+            $('#' + studentUsageProgressId).text("Done.");
+			
+			//Allow clicks on usage links again
+			resourceUsageClickOn();
+			studentUsageClickOn();
         }
     }
 	
