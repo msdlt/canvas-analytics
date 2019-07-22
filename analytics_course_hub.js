@@ -70,7 +70,7 @@
 		//NOT ROBUST: Canvas button format/style could change
 		var buttonAnchorTagOpen = '<a class="btn button-sidebar-wide" id="' + openButtonId + '">';
 		var buttonIcon = '<i class="icon-analytics" role="presentation"></i> ';
-		var buttonText = 'Analytics Hub';
+		var buttonText = 'Analytics Hub (PoC)';
 		var buttonAnchorTagClose = '</a>';
 		
 		var buttonHtml = buttonAnchorTagOpen + buttonIcon + buttonText + buttonAnchorTagClose;
@@ -101,7 +101,7 @@
 		
 		//Add the header
 		var headerId = 'analyitcs-hub-header';
-		var analyticsHubHeader = '<h2 id="' + headerId + '">Analytics Hub</h2>';
+		var analyticsHubHeader = '<h2 id="' + headerId + '">Analytics Hub (PROOF OF CONCEPT)</h2>';
 		$(analyticsHubDivIdentifier).append(analyticsHubHeader);
 
 		//Add the close button into the header
