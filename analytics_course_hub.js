@@ -102,7 +102,8 @@
 		//Add the header
 		var headerId = 'analyitcs-hub-header';
 		var analyticsHubHeader = '<h2 id="' + headerId + '">Analytics Hub (PROOF OF CONCEPT)</h2>';
-		$(analyticsHubDivIdentifier).append(analyticsHubHeader);
+		var analyticsHubExplanation = '<p>Please note that this is by no means complete, nor robust. It is just intended as an example of what could be done to bring together various sources of analytics, both those provided natively within a Canvas course (but in a variety of locations) and additional, custom analytics to supplement what already exists. Importantly, I (Jon M) am not in any way suggesting that JS should be used for such a tool (it should be an LTI tool), it was just the easiest way to throw together a proof of concept.</p>'
+		$(analyticsHubDivIdentifier).append(analyticsHubHeader + analyticsHubExplanation);
 
 		//Add the close button into the header
 		var closeButtonId = 'analyitcs-hub-close';
