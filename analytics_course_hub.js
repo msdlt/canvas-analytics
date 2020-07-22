@@ -45,11 +45,11 @@
 		//Get home page right hand side course options div
 		var homeRightOptionsDiv = $(courseOptionsDivIdentifier);
 		
-		//Check whether user can see the "View Course Analytics" button, and only add this button if they can
+		//Check whether user can see the "New Analytics" button, and only add this button if they can
 		//NOT ROBUST: URL for identifying this button could change
 		//NOT ROBUST: Permissions should not be based on existence of that button
 		//TODO: Use API to work out if user is permitted to perform analytics functions
-		if(homeRightOptionsDiv.length > 0 && $('a[href="/courses/' + courseId + '/analytics"]', homeRightOptionsDiv).length > 0) {
+		if(homeRightOptionsDiv.length > 0 && $('a[href="https://canvas.ox.ac.uk/courses/' + course_id + '/external_tools/1337?launch_type=course_navigation"]', homeRightOptionsDiv).length > 0) {
 			//Add button
 			var buttonHtml = createButtonHtml(openButtonId);
 			homeRightOptionsDiv.append(buttonHtml);

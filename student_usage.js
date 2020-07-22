@@ -58,8 +58,8 @@
 		//Get home page right hand side course options div
 		var homeRightOptionsDiv = $('div#course_show_secondary div.course-options');
 		
-		//Check whether user can see the "View Course Analytics" button, and only add this button if they can
-		if(homeRightOptionsDiv.length > 0 && $('a[href="/courses/' + course_id + '/analytics"]', homeRightOptionsDiv).length > 0) {
+		//Check whether user can see the "New Analytics" button, and only add this button if they can
+		if(homeRightOptionsDiv.length > 0 && $('a[href="https://canvas.ox.ac.uk/courses/' + course_id + '/external_tools/1337?launch_type=course_navigation"]', homeRightOptionsDiv).length > 0) {
 			//Add button
 			homeRightOptionsDiv.append('<a class="btn button-sidebar-wide" id="us_button">' + defaultButtonText + '</a>');
 			
